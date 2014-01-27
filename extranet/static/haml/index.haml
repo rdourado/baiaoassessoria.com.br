@@ -1,0 +1,55 @@
+!!!
+%html{:lang => "pt-br"} 
+%head 
+	%title Home
+	= Haml::Engine.new(File.read("/Applications/MAMP/htdocs/baiaoassessoria.com.br/extranet/static/haml/_head.haml")).render
+%body 
+	= Haml::Engine.new(File.read("/Applications/MAMP/htdocs/baiaoassessoria.com.br/extranet/static/haml/_header.haml")).render
+	.body 
+		.content
+			%section.hero 
+				%h3.hero-title Eventos recentes e galerias de fotos
+				#slider
+					%a.buttons.prev{:href => "#"} «
+					.viewport
+						%ul.overview
+							%li<
+								%img{:src => "http://dummyimage.com/612x392", :alt => ""}/ 
+							%li<
+								%img{:src => "http://dummyimage.com/612x392", :alt => ""}/ 
+							%li<
+								%img{:src => "http://dummyimage.com/612x392", :alt => ""}/ 
+					%a.buttons.next{:href => "#"} »
+					%ul.pager
+						%li<
+							%a.pagenum{:href => "#", :rel => "0"} 1
+						%li<
+							%a.pagenum{:href => "#", :rel => "1"} 2
+						%li<
+							%a.pagenum{:href => "#", :rel => "2"} 3
+			%section.recent 
+				%h3.recent-title Últimas notícias, informações e comunicados
+				%ol.post-archive 
+					%li.post-item 
+						%a{:href => "#"}
+							%img.post-image{:src => "", :alt => "", :width => "56", :height => "56"}/ 
+							%h4.post-title Pedidos de encerramento de pastas no PJUR/Ambiente de Cobrança SRRC do Itaú/Unibanco
+						%p.post-excerpt Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry‘s standard dummy text ever since the 1500s.
+						%a.post-link.u{:href => "#"} Leia esse texto completo
+						%a.post-comment-link.u{:href => "#"} 02 comentários
+					%li.post-item 
+						%a{:href => "#"}
+							%img.post-image{:src => "", :alt => "", :width => "56", :height => "56"}/ 
+							%h4.post-title Identificação do segmento EMP1 e EMP2
+						%p.post-excerpt Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry‘s standard dummy text ever since the 1500s.
+						%a.post-link.u{:href => "#"} Leia esse texto completo
+						%a.post-comment-link.u{:href => "#"} 04 comentários
+					%li.post-item 
+						%a{:href => "#"}
+							%img.post-image{:src => "", :alt => "", :width => "56", :height => "56"}/ 
+							%h4.post-title Recuperação de crédito empresas - roteiro agenda quebra de acordo
+						%p.post-excerpt Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry‘s standard dummy text ever since the 1500s.
+						%a.post-link.u{:href => "#"} Leia esse texto completo
+						%a.post-comment-link.u{:href => "#"} Nenhum comentário
+		= Haml::Engine.new(File.read("/Applications/MAMP/htdocs/baiaoassessoria.com.br/extranet/static/haml/_widgets.haml")).render
+	= Haml::Engine.new(File.read("/Applications/MAMP/htdocs/baiaoassessoria.com.br/extranet/static/haml/_footer.haml")).render

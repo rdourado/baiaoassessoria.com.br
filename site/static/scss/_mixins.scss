@@ -1,0 +1,89 @@
+@mixin clearfix {
+	&:before,
+	&:after {
+		content: " ";
+		display: table;
+	}
+	&:after { clear: both }
+	& { *zoom: 1 }
+}
+
+@mixin transition($prop, $time) {
+	-webkit-transition: $prop $time ease-out; 
+	   -moz-transition: $prop $time ease-out; 
+		 -o-transition: $prop $time ease-out; 
+			transition: $prop $time ease-out; 
+}
+
+@mixin animation($prop) {
+	-webkit-animation: $prop;
+	   -moz-animation: $prop;
+		 -o-animation: $prop;
+			animation: $prop;
+}
+
+@mixin box-sizing {
+	-webkit-box-sizing: border-box;
+	   -moz-box-sizing: border-box;
+			box-sizing: border-box;
+}
+
+@mixin box-shadow($prop) {
+	-webkit-box-shadow: $prop;
+			box-shadow: $prop;
+}
+
+@mixin border-radius($radius) {
+	-webkit-border-radius: $radius;
+	border-radius: $radius;
+	background-clip: padding-box;
+}
+
+@mixin placeholder($color) {
+	&::-webkit-input-placeholder { color: $color }
+	&:-moz-placeholder { color: $color }
+	&::-moz-placeholder { color: $color }
+	&:-ms-input-placeholder { color: $color }
+}
+
+@mixin linear-gradient($orientation, $colors, $positions) {
+	$orientA: '';
+	$orientB: '';
+	$orientC: '';
+	@if $orientation == lr or $orientation == l {
+		$orientA: left;
+		$orientB: to right;
+		$orientC: left top, right top;
+	}
+	@if $orientation == tb or $orientation == t {
+		$orientA: top;
+		$orientB: to bottom;
+		$orientC: left top, left bottom;
+	}
+	@if $orientation == tlbr or $orientation == ltrb {
+		$orientA: -45deg;
+		$orientB: 135deg;
+		$orientC: left top, right bottom;
+	}
+	@if $orientation == bltr or $orientation == lbrt {
+		$orientA: 45deg;
+		$orientB: 45deg;
+		$orientC: left top, right bottom;
+	}
+
+	$prop: ();
+	$old: ();
+	$total: length($colors);
+	@for $i from 1 through $total {
+		$prop: append($prop, nth($colors, $i) nth($positions, $i), comma);
+		$old: append($old, color-stop(nth($positions, $i),nth($colors, $i)), comma);
+	}
+	
+	background: nth($colors, 1); // Old browsers
+	background-image: -moz-linear-gradient($orientA, $prop); // FF3.6+
+	background-image: -webkit-gradient(linear, $orientC, $old); // Chrome,Safari4+
+	background-image: -webkit-linear-gradient($orientA, $prop); // Chrome10+,Safari5.1+
+	background-image: -o-linear-gradient($orientA, $prop); // Opera 11.10+
+	background-image: -ms-linear-gradient($orientA, $prop); // IE10+
+	background-image: linear-gradient($orientB, $prop); // W3C
+}

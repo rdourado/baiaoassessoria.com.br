@@ -1,0 +1,70 @@
+!!!
+%html{:lang => "pt-br"} 
+%head 
+	%title Contatos da empresa
+	= Haml::Engine.new(File.read("/Applications/MAMP/htdocs/baiaoassessoria.com.br/extranet/static/haml/_head.haml")).render
+%body.page-comunicados 
+	= Haml::Engine.new(File.read("/Applications/MAMP/htdocs/baiaoassessoria.com.br/extranet/static/haml/_header.haml")).render
+	.body 
+		%h1.page-title Contatos da empresa
+		%p Escolha a unidade abaixo clicando numa das imagens a seguir, para ter acesso a todos os dados de contato, bem como a relação completa dos seus responsaveis e todos os funcionários da mesma:
+		.firm-data 
+			%p 
+				%a{:href => "#"} 
+					%img.firm-image{:src => "http://dummyimage.com/216x216", :alt => "", :width => "216", :height => "216"}/ 
+			%h2 Matriz Rio de Janeiro (RJ)
+			%p Rua do Ouvidor 121 - 8º andar, Centro - Rio de Janeiro/RJ - CEP 20040-031
+			%p 
+				%a{:href => "#"} 
+					(21) 2221-3330
+				%br/ 
+				%a.u{:href => "#"} 
+					rj@baiaoassessoria.com.br
+		%hr/ 
+		%h3 Filiais
+		%ul.cols-4
+			%li.firm-data
+				%a{:href => "#"} 
+					%img.firm-image{:src => "http://dummyimage.com/216x216", :alt => "", :width => "216", :height => "216"}/ 
+				%h2.firm-title Juiz de Fora (MG)
+				%p.firm-address R. Espírito Santo, 1115 - sala 1.306, Centro - Juiz de Fora/MG - CEP 36016-905
+				%p.firm-contact 
+					%a{:href => "#"} 
+						(32) 3218-7310
+					%br/ 
+					%a.u{:href => "#"} 
+						jf@baiaoassessoria.com.br
+			%li.firm-data
+				%a{:href => "#"} 
+					%img.firm-image{:src => "http://dummyimage.com/216x216", :alt => "", :width => "216", :height => "216"}/ 
+				%h2.firm-title Juiz de Fora (MG)
+				%p.firm-address R. Espírito Santo, 1115 - sala 1.306, Centro - Juiz de Fora/MG - CEP 36016-905
+				%p.firm-contact 
+					%a{:href => "#"} 
+						(32) 3218-7310
+					%br/ 
+					%a.u{:href => "#"} 
+						jf@baiaoassessoria.com.br
+			%li.firm-data
+				%a{:href => "#"} 
+					%img.firm-image{:src => "http://dummyimage.com/216x216", :alt => "", :width => "216", :height => "216"}/ 
+				%h2.firm-title Juiz de Fora (MG)
+				%p.firm-address R. Espírito Santo, 1115 - sala 1.306, Centro - Juiz de Fora/MG - CEP 36016-905
+				%p.firm-contact 
+					%a{:href => "#"} 
+						(32) 3218-7310
+					%br/ 
+					%a.u{:href => "#"} 
+						jf@baiaoassessoria.com.br
+			%li.firm-data
+				%a{:href => "#"} 
+					%img.firm-image{:src => "http://dummyimage.com/216x216", :alt => "", :width => "216", :height => "216"}/ 
+				%h2.firm-title Juiz de Fora (MG)
+				%p.firm-address R. Espírito Santo, 1115 - sala 1.306, Centro - Juiz de Fora/MG - CEP 36016-905
+				%p.firm-contact 
+					%a{:href => "#"} 
+						(32) 3218-7310
+					%br/ 
+					%a.u{:href => "#"} 
+						jf@baiaoassessoria.com.br
+	= Haml::Engine.new(File.read("/Applications/MAMP/htdocs/baiaoassessoria.com.br/extranet/static/haml/_footer.haml")).render

@@ -1,0 +1,45 @@
+@import "config";
+@import "mixins";
+
+html .mceContentBody { max-width: 540px }
+
+body {
+	font: 13px/20px $f1;
+	text-rendering: optimizeLegibility;
+	vertical-align: baseline;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font: 20px/1.2 $f3;
+	margin-bottom: 20px;
+}
+h1, h2 { &:before { content: '| ' } }
+
+p, ul, ol {
+	margin: 0 0 20px;
+	padding: 0;
+}
+li {
+	margin-left: 16px;
+	position: relative;
+	&:before {
+		content: '▪ ';
+		display: block;
+		left: -16px;
+		position: absolute;
+		top: 0;
+	}
+}
+ol li {
+	list-style: decimal inside;
+	margin-left: 0;
+	&:before { display: none }
+}
+
+.alert {
+	background: rgba(#000,.1);
+	margin-bottom: 40px;
+	margin-top: 40px;
+	padding: 20px 20px 20px 68px;
+	@include border-radius(10px);
+}

@@ -1,0 +1,52 @@
+%header.head 
+	%h1.logo< 
+		%img.logo-img{:src => "img/logo.png", :alt => "", :width => "277", :height => "159"}/ 
+	%section.welcome 
+		%h2.welcome-title< 
+			Olá
+			%strong Flávio Baião
+		%img.welcome-avatar{:src => "", :alt => "", :width => "76", :height => "76"}/ 
+		%dl.welcome-data 
+			%dt.welcome-term Setor:
+			%dd.welcome-value Diretoria
+		%dl.welcome-data 
+			%dt.welcome-term Sede/Filial:
+			%dd.welcome-value Rio de Janeiro/RJ
+		%dl.welcome-data 
+			%dt.welcome-term Cargo:
+			%dd.welcome-value Diretor executivo
+		%dl.welcome-data 
+			%dt.welcome-term Telefone:
+			%dd.welcome-value (21) 2221-3330 ramal 123
+	%form.search-form{:action => "", :method => "get"} 
+		%fieldset 
+			%legend Busca no site
+			%input#s.s-search{:type => "search", :name => "s", :required => true, :placeholder => "Busque o conteúdo no site", :aria => {:required => "true", :label => "Busque o conteúdo no site"}}/ 
+			%button.s-submit{:type => "submit"}< 
+				%span Ok
+	%form.google-form{:action => "", :method => "get"} 
+		%fieldset 
+			%legend Busca no Google
+			%input#q.s-search{:type => "search", :name => "q", :required => true, :placeholder => "Busque no Google", :aria => {:required => "true", :label => "Busque o conteúdo no site"}}/ 
+			%button.s-submit{:type => "submit"}< 
+				%span Ok
+	%nav.nav 
+		%ul.menu 
+			%li.menu-item< 
+				%a{:href => "index.html"} Início
+			%li.menu-item< 
+				%a{:href => "comunicados.html"} Comunicados
+			%li.menu-item< 
+				%a{:href => "contatos.html"} Contatos da empresa
+			%li.menu-item< 
+				%a{:href => "galerias.html"} Galerias
+			%li.menu-item< 
+				%a{:href => "eventos.html"} Eventos
+			%li.menu-item< 
+				%a{:href => "#"} Enquetes
+		%ul.shortcuts 
+			%li.shortcut-item< 
+				%a{:href => "#"} Matriz
+			%li.shortcut-item< 
+				%a{:href => "#"} Filiais
+%hr/ 

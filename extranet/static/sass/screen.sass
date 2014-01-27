@@ -1,0 +1,622 @@
+@import "config"
+@import "mixins"
+
+// Tags
+
+*
+	margin: 0
+	padding: 0
+body
+	font: 12px/20px $font3
+hr
+	display: none
+cite
+	font-style: normal
+img,fieldset
+	border: 0 none
+img
+	&.b
+		border: 2px solid $wineL
+em
+	color: $wineL
+	font-style: normal
+p,ul,ol
+	margin-bottom: 20px
+ul,ol
+	list-style: none
+h2,h3
+	color: $wineL
+	font-size: 16px
+	font-weight: normal
+	margin-bottom: 20px
+a
+	color: $wineL
+	outline: none
+	text-decoration: none
+	&.u
+		text-decoration: underline
+	img
+		border: 2px solid $wineL
+	&.no img
+		border: 0 none
+	&:hover, &:focus, &:active
+		color: $red
+		img
+			border-color: $red
+
+// Header
+
+.head
+	border-bottom: 6px solid $ice
+	height: 241px
+	position: relative
+	@include box-shadow(0 1px 1px rgba(#000,.5))
+	@include radial-gradient(#9f2325 #6a2322)
+	&:before
+		background: url(../img/halftone.png) no-repeat center center
+		content: ''
+		display: block
+		height: 100%
+		left: 0
+		position: absolute
+		top: 0
+		width: 100%
+		z-index: 1
+		@include background-size(cover)
+.logo
+	left: 50%
+	margin-left: -459px
+	position: absolute
+	top: 0
+	z-index: 2
+
+.welcome
+	left: 50%
+	margin-left: 170px
+	padding-top: 39px
+	position: absolute
+	top: 0
+	z-index: 3
+.welcome-title
+	color: #fff
+	display: block
+	font: 12px $font
+	margin-bottom: 10px
+	strong
+		color: $red
+		font-size: 20px
+		font-weight: normal
+.welcome-avatar
+	border: 2px solid #fff
+	float: left
+	margin-right: 10px
+	@include border-radius(2px)
+.welcome-data
+	color: #fff
+	font: 12px/20px $font
+	margin-left: 90px
+.welcome-term
+	display: inline
+	margin-right: 4px
+.welcome-value
+	color: $red
+	display: inline
+
+.search-form,
+.google-form
+	left: 50%
+	margin-left: -150px
+	position: absolute
+	z-index: 5
+	width: 300px
+	legend
+		display: none
+.search-form
+	top: 35px
+.google-form
+	top: 72px
+.s-search
+	background: $wine
+	background: rgba($wine,.7)
+	border: 0 none
+	color: #fff
+	font: 11px/20px $font2
+	margin: 0
+	outline: none
+	padding: 5px 20px 5px 4px
+	width: 100%
+	@include appearance(textfield)
+	@include border-radius(3px)
+	@include box-shadow((inset 0 2px 2px rgba(#000,.2), 0 1px 0 rgba($red,.3)))
+	@include box-sizing
+	@include placeholder($red)
+.s-submit
+	background: url(../img/icon-magnifier.png) no-repeat center center
+	border: 0 none
+	cursor: pointer
+	display: block
+	height: 30px
+	margin: 0
+	padding: 0
+	position: absolute
+	right: 0
+	top: 0
+	width: 30px
+	span
+		display: none
+
+.menu
+	background: #000
+	bottom: -6px
+	left: 50%
+	margin: 0 0 0 -470px
+	overflow: hidden
+	padding-left: 40px
+	position: absolute
+	width: 900px
+	z-index: 4
+	@include border-radius(6px 6px 0 0)
+	@include linear-gradient(top, #fff $ice, 0% 100%)
+	.menu-item
+		float: left
+		margin-right: 30px
+		a
+			background-color: transparent
+			border-bottom: 6px solid transparent
+			color: $wine
+			display: block
+			font: 12px/51px $font
+			padding-top: 9px
+			text-transform: uppercase
+			&:hover,
+			&:focus,
+			&:active
+				border-color: $wine
+				color: $red
+				text-decoration: none
+	.current-menu-item a,
+	.current-menu-parent a,
+	.current-post-ancestor a
+		border-color: $wine
+		color: $red
+
+.nav
+	z-index: 5
+.shortcuts
+	background: url(../img/icon-mobile.png) no-repeat -8px center
+	font: 12px $font3
+	left: 50%
+	margin-left: -150px
+	padding-left: 20px
+	position: absolute
+	top: 118px
+	z-index: 6
+	.menu-item
+		color: #fff
+		display: inline
+		a
+			color: #fff
+			&:hover,
+			&:focus,
+			&:active
+				color: $red
+				text-decoration: underline
+		&:before
+			content: ' - '
+		&:first-child:before
+			content: ''
+
+// Footer
+
+.foot
+	background: #8f2324 url(../img/halftone.png) no-repeat center bottom
+	@include background-size(cover)
+	clear: both
+	color: #fff
+	display: block
+	font: 11px/16px $font3
+	padding: 35px 0
+	position: relative
+	a,em
+		color: $red
+#hcard-baiao
+	margin: 0 auto
+	width: 940px
+.by
+	display: block
+	left: 50%
+	margin: -9px 0 0 348px
+	position: absolute
+	top: 50%
+
+// Body
+
+.body
+	margin: 0 auto
+	padding: 45px 0
+	width: 940px
+	@include clearfix
+	hr
+		border: 0 none
+		clear: both
+		display: block
+		height: 2px
+		margin: 0 0 80px
+		position: relative
+		top: 40px
+		@include linear-gradient(left, #fff #d4706f #fff, 0 50% 100%)
+		&:after
+			content: ''
+			display: block
+			height: 1px
+			@include linear-gradient(left, #fff #682e2c #fff, 0 50% 100%)
+.content
+	float: left
+	width: 620px
+.widgets
+	float: right
+	width: 300px
+
+// Content
+
+.hero
+	margin-bottom: 30px
+.hero-title,
+.page-title,
+.recent-title,
+.widget_text .widget-title
+	color: $wineL
+	font: 18px/1.2 $font3
+	margin-bottom: 30px
+	&:before
+		content: "| "
+
+.post-meta
+	background: $ice
+	clear: both
+	margin-bottom: 30px
+	overflow: hidden
+	padding: 8px 10px
+	@include border-radius(10px)
+	a
+		text-decoration: underline
+	dl
+		float: left
+	.post-author
+		clear: left
+	dt
+		color: $wineL
+		display: inline-block
+	dd
+		display: inline
+		margin: 0 10px 0 3px
+.post-date-term,
+.post-author-term
+	min-width: 50px
+	text-align: right
+
+.cols-4
+	li
+		float: left
+		margin-left: 20px
+		width: 220px
+		&:first-child
+			margin-left: 0
+
+.alignleft
+	float: left
+	margin: 0 20px 20px 0
+.aligncenter
+	display: block
+	margin: 0 auto 20px
+
+.wp-pagenavi
+	margin: 30px 0
+	text-align: center
+	a,span
+		border: 1px solid $red
+		color: $wineL
+		display: inline-block
+		font: 12px/22px $font2
+		margin: 0 2px
+		padding: 0 6px
+	a:hover,
+	a:focus,
+	a:active
+		background: $wineL
+		border-color: $wineL
+		color: #fff
+	.pages,
+	.nextpostslink,
+	.previouspostslink
+		background: $red
+		color: #fff
+	.pages
+		padding: 0 18px
+	.current
+		cursor: default
+
+// Comments
+
+.comment
+	padding-left: 100px
+	position: relative
+	.attachment-user-avatar
+		display: block
+		left: 0
+		position: absolute
+		top: 2px
+.comment-body
+	margin-bottom: 30px
+.comment-reply-link,
+#submit
+	background: $wineL
+	border: 0 none
+	color: #fff
+	cursor: pointer
+	display: inline-block
+	font: 12px/20px $font2
+	padding: 8px 12px
+	@include border-radius(3px)
+	&:hover,
+	&:focus,
+	&:active
+		background-color: $red
+		color: #fff
+.comment-form-comment 
+	br,label
+		display: none
+.text,
+.area
+	background: #f0f0f0
+	border: 1px solid #e6e6e6
+	font: 12px/20px $font3
+	padding: 8px 12px
+	width: 100%
+	@include border-radius(5px)
+	@include box-sizing
+
+// Modules
+
+.firm-data
+	margin-bottom: 30px
+	max-width: 460px
+	img
+		float: left
+		margin: 0 20px 20px 0
+		.cols-4 &
+			display: block
+			float: none
+	.cols-4 &:nth-child(4n+1)
+		clear: left
+.firm-title
+	color: $wineL
+
+.sector
+	background: $ice
+	margin: 30px 0
+	overflow: hidden
+	padding: 20px 25px 10px
+	@include border-radius(10px)
+.team-item
+	margin-bottom: 15px
+	width: 48%
+	img
+		margin-bottom: 0
+	&:nth-child(odd)
+		clear: left
+		float: left
+	&:nth-child(even)
+		float: right
+.team-name
+	color: $wineL
+
+.gallery
+	margin: 30px 0 10px
+	@include clearfix
+	a
+		float: left
+		margin: 0 0 20px 20px
+		&:nth-child(4n+1)
+			margin-left: 0
+
+.box
+	background: $ice
+	margin-bottom: 30px
+	overflow: hidden
+	padding: 25px 30px
+	@include border-radius(10px)
+	img,ul,ol
+		margin-bottom: 0
+.user-term
+	display: inline
+	margin-right: 4px
+.user-value
+	color: $wineL
+	display: inline
+
+// Home
+
+#slider
+	$width: 620px
+	$height: 400px
+	border: 4px solid $red
+	height: $height - 8
+	overflow: hidden
+	position: relative
+	img
+		display: block
+	.viewport
+		float: left
+		height: $height - 8
+		overflow: hidden
+		position: relative
+		width: $width - 8
+	.buttons
+		display: block
+		height: 23px
+		position: absolute
+		text-indent: -9999px
+		top: 188px
+		width: 15px
+		z-index: 20
+	.prev
+		background: url(../img/icon-left.png) no-repeat center center
+		left: 10px
+	.next
+		background: url(../img/icon-right.png) no-repeat center center
+		right: 10px
+	.disable
+		visibility: hidden
+	.overview
+		left: 0
+		position: absolute
+		top: 0
+		li
+			border-right: 4px solid $red
+			float: left
+			height: $height - 8
+			width: $width - 8
+	.pager
+		bottom: 10px
+		margin: 0
+		position: absolute
+		right: 10px
+		li
+			display: inline
+	.pagenum
+		background: rgba(#000,.7)
+		color: #fff
+		float: left
+		font: 12px/20px $font3
+		margin-left: 6px
+		text-align: center
+		width: 20px
+		@include border-radius(3px)
+	.active
+		background: $red
+		background: rgba($red,.7)
+
+// Archive
+
+.filters
+	background: $ice
+	font: 12px/26px $font3
+	margin-bottom: 30px
+	overflow: hidden
+	padding: 20px 15px 10px
+	@include border-radius(10px)
+.filter-title
+	clear: left
+	float: left
+	font-weight: normal
+	margin: 0 0 10px
+	text-align: right
+	width: 80px
+.filter-list
+	margin: 0 0 0 88px
+	@include clearfix
+	.cat-item
+		display: inline
+		&:first-child a
+			margin-right: 10px
+		a
+			background: $red
+			color: #fff
+			float: left
+			margin: 0 0 5px 5px
+			padding: 0 7px
+			@include border-radius(3px)
+			&:hover,
+			&:focus,
+			&:active
+				background: $wineL
+	.current-cat a
+		background: $wineL
+
+.post-item
+	font: 12px/20px $font3
+	padding: 30px 0
+	position: relative
+	@include clearfix
+	img
+		float: left
+	&:first-child
+		padding-top: 0
+	&:before,
+	&:after
+		content: ''
+		display: block
+		height: 1px
+		position: absolute
+		width: 100%
+	&:before
+		bottom: 0
+		@include linear-gradient(left, #fff #682e2c #fff, 0 50% 100%)
+	&:after
+		bottom: -1px
+		@include linear-gradient(left, #fff #d4706f #fff, 0 50% 100%)
+.post-title
+	font: 14px/24px $font3
+.post-title,
+.post-excerpt
+	margin: 0 10px 10px 80px
+.post-comment-link,
+.post-link
+	padding-left: 25px
+.post-comment-link
+	background: url(../img/icon-comment.png) no-repeat 0 center
+	margin-left: 80px
+.post-link
+	background: url(../img/icon-doc.png) no-repeat 0 center
+	float: right
+	margin-right: 10px
+
+// Widgets
+
+.widget
+	background: $red
+	border: 1px solid $wineL
+	font: 12px/20px $font3
+	margin-bottom: 30px
+	overflow: hidden
+	padding: 0 20px 15px
+	@include border-radius(10px)
+	a:hover, a:focus, a:active
+		color: #fff
+		img
+			border-color: #fff
+	li
+		clear: left
+		margin-bottom: 15px
+		@include clearfix
+		img
+			border: 2px solid $wineL
+			float: left
+			margin-right: 12px
+	time
+		font-weight: bold
+.widget-title
+	color: #fff
+	font: 18px/1.3 $font3
+	margin: 0 0 15px -20px
+	padding: 14px 20px
+	text-align: center
+	width: 100%
+	@include linear-gradient(top, $red $wineL, 0% 50%)
+
+.widget_text
+	background: none
+	border: 0 none
+	overflow: visible
+	padding: 0
+	.widget-title
+		background: none
+		border: 0 none
+		margin-left: 0
+		padding: 0
+		text-align: left
+
+// Fancybox
+
+@import "fancybox"

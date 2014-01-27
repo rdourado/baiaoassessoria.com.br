@@ -1,0 +1,700 @@
+@import "config";
+@import "mixins";
+
+@mixin bullet {
+	li {
+		margin-left: 16px;
+		position: relative;
+		&:before {
+			content: '▪ ';
+			display: block;
+			left: -16px;
+			position: absolute;
+			top: 0;
+		}
+	}
+	ol li {
+		list-style: decimal inside;
+		margin-left: 0;
+		&:before { display: none }
+	}
+}
+
+// Tags
+
+* {
+	margin: 0;
+	padding: 0;
+}
+body {
+	background: $wine url(../img/halftone.jpg) no-repeat center top;
+	min-width: 960px;
+}
+img, fieldset { border: 0 none }
+img { vertical-align: bottom }
+hr, legend { display: none }
+em, strong { color: $red }
+li { list-style: none }
+a {
+	color: $red;
+	outline: none;
+	text-decoration: none;
+}
+
+// Common
+
+.hide,
+.hide + br { display: none !important }
+.block { display: block }
+
+// Header
+
+.head {
+	border-top: 11px solid #fff;
+	position: relative;
+}
+.logo {
+	margin-bottom: 9px;
+	position: relative;
+	text-align: center;
+	top: -11px;
+	img {
+		margin: 0 auto;
+		vertical-align: bottom;
+	}
+}
+.nav {
+	margin: 0 auto;
+	padding: 16px 0;
+	width: 940px;
+	@include linear-gradient(t, (#fff, #efefef), (0%, 100%));
+	@include border-radius(5px 5px 0 0);
+	@include clearfix;
+}
+.menu { padding: 0 10px }
+.menu-item {
+	background: url(../img/line-menu.png) no-repeat left center;
+	float: left;
+	font: 12px/27px $f1;
+	padding: 0 10px 0 11px;
+	text-transform: uppercase;
+	&:first-child { background: none }
+	a {
+		color: $wine;
+		@include transition(color,$fast);
+		&:hover,
+		&:focus,
+		&:active { color: $red }
+	}
+}
+
+.search-input {
+	background: none;
+	border: 0 none;
+	border-left: 2px solid #fff;
+	color: $red;
+	display: block;
+	font: 11px $f2;
+	margin-right: -440px;
+	outline: none;
+	padding: 3px 0 3px 10px;
+	position: absolute;
+	right: 50%;
+	top: 145px;
+	width: 100px;
+	@include placeholder($red);
+	@include transition(width,$fast);
+	&:focus {
+		width: 140px;
+		@include placeholder(transparent);
+	}
+}
+.search-submit {
+	background: none;
+	border: 0 none;
+	cursor: pointer;
+	display: block;
+	margin-right: -470px;
+	padding: 4px;
+	position: absolute;
+	right: 50%;
+	top: 145px;
+	img { display: block }
+}
+
+// Footer
+
+.foot {
+	background: #fff;
+	clear: both;
+	position: relative;
+	@include linear-gradient(t, (#fff #b76364 #9f2f2f #b15656 #ebd5d5 #fff), (0,0,1px,2px,3px,4px));
+}
+.vcard {
+	font: 11px/16px $f1;
+	margin: 0 auto;
+	padding: 36px 0;
+	width: 940px;
+	a {
+		border-bottom: 1px solid $wine;
+		color: $wine;
+	}
+	.tel {
+		border-bottom: 0 none;
+		color: #000;
+	}
+}
+.social-list {
+	left: 50%;
+	margin: -16px 0 0 90px;
+	position: absolute;
+	top: 50%;
+}
+.social-item {
+	float: left;
+	margin-right: 7px;
+}
+.by {
+	display: block;
+	margin: -8px -470px 0 0;
+	position: absolute;
+	right: 50%;
+	top: 50%;
+}
+
+// Slides
+
+$slideW: 940px;
+$slideH: 290px;
+
+.viewport {
+	float: left;
+	height: $slideH;
+	overflow: hidden;
+	position: relative;
+	width: $slideW;
+}
+.overview {
+	left: 0;
+	position: absolute;
+	top: 0;
+	li { float: left }
+}
+.buttons {
+	background-image: url(../img/sprites.png);
+	background-repeat: no-repeat;
+	height: 290px;
+	position: absolute;
+	top: 0;
+	width: 20px;
+	&.prev {
+		background-position: 0 -508px;
+		left: -25px;
+	}
+	&.next {
+		background-position: -20px -508px;
+		right: -25px;
+	}
+}
+
+.slides {
+	height: $slideH;
+	margin: 0 auto;
+	position: relative;
+	width: $slideW;
+}
+.slides-item {
+	display: block;
+	position: relative;
+	a { color: #fff }
+}
+.slides-info {
+	background: rgba(#000,.7);
+	background-clip: padding-box;
+	border-left: 5px solid rgba($wine,.7);
+	border-right: 5px solid rgba($wine,.7);
+	left: 70px;
+	margin-top: -87px;
+	min-height: 174px;
+	position: absolute;
+	top: 50%;
+	width: 414px;
+}
+.slides-title {
+	font: 26px/30px $f3;
+	padding: 15px;
+}
+.slides-excerpt {
+	font: 12px/20px $f3;
+	padding: 0 15px 15px;
+}
+.pager {
+	bottom: 0;
+	padding: 17px;
+	position: absolute;
+	right: 0;
+	li {
+		float: left;
+		margin-left: 7px;
+	}
+}
+.pagenum {
+	background: rgba(#000,.7);
+	color: #fff;
+	display: block;
+	font: 12px/20px $f1;
+	opacity: .5;
+	padding: 0 7px;
+	@include border-radius(4px);
+	@include transition(opacity, $fast);
+	&:hover,
+	&:focus,
+	&:active,
+	&.active { opacity: 1 }
+}
+
+// Body 
+
+.body {
+	margin: 0 auto;
+	padding: 40px 0;
+	width: 940px;
+	@include clearfix;
+}
+.content {
+	float: left;
+	width: 620px;
+}
+.sidebar {
+	float: right;
+	width: 300px;
+}
+
+.page-template-servicos-php .header { 
+	background-position: center (-196px * 1) }
+.page-template-institucional-php .header { 
+	background-position: center (-196px * 4) }
+.page-template-contato-php .header {
+	background-position: center (-196px * 5) }
+
+.header {
+	background-color: #fff;
+	background-image: url(../img/headers.jpg);
+	background-repeat: no-repeat;
+	height: 196px;
+	position: relative;
+}
+.header-wrap,
+.header-title {
+	background: rgba(#000,.7);
+	background-clip: padding-box;
+	border-left: 5px solid rgba($wine,.7);
+	border-right: 5px solid rgba($wine,.7);
+	color: #fff;
+	font: 26px/34px $f3;
+	left: 50%;
+	margin: -34px 0 0 -470px;
+	min-width: 380px;
+	padding: 17px;
+	position: absolute;
+	top: 50%;
+}
+.header-title {
+	min-width: 380px;
+	width: auto;
+}
+.header-wrap {
+	margin-top: -64px;
+	width: 380px;
+	.header-title {
+		background: none;
+		border: 0 none;
+		margin: 0;
+		padding: 0;
+		position: static;
+		width: auto;
+	}
+	.header-quote { font: 12px/20px $f3 }
+	.header-source { text-align: right }
+}
+
+.post-content,
+.textwidget {
+	color: #fff;
+	font: 13px/20px $f1;
+	p, ul, ol { margin-bottom: 20px }
+	p + ul, p + ol { margin-top: -20px }
+	@include bullet;
+}
+.post-content {
+	a { text-decoration: underline }
+	p, ul, ol { margin-right: 80px }
+	h1, h2, h3,
+	h4, h5, h6 {
+		color: $red;
+		font: 20px/1.2 $f3;
+		margin: 40px 80px 20px 0;
+		&:first-child { margin-top: 0 }
+	}
+	h1, h2 { &:before { content: '| ' } }
+	.alert {
+		background: rgba($red,.5) url(../img/sprites.png) no-repeat 20px -1006px;
+		margin-bottom: 40px;
+		margin-top: 40px;
+		padding: 20px 20px 20px 68px;
+		@include border-radius(10px);
+		em, strong { color: inherit }
+	}
+}
+
+.post-content .gallery-item,
+.wgal-main,
+.wgal-thumb {
+	// border: 2px solid #fff;
+	display: block;
+	margin-bottom: 20px;
+	position: relative;
+	// &:before {
+		// border: 2px solid $red;
+	// 	content: '';
+	// 	display: none;
+	// 	height: 100%;
+	// 	left: 0;
+	// 	position: absolute;
+	// 	top: 0;
+	// 	width: 100%;
+	// 	@include box-sizing;
+	// }
+	// &:hover,
+	// &:focus,
+	// &:active {
+	// 	border-color: $red;
+	// 	&:before { display: block }
+	// }
+}
+.gallery-item {
+	float: left;
+	margin-left: 20px;
+	&:nth-child(4n+1) {
+		clear: left;
+		margin-left: 0;
+	}
+}
+
+.wp-pagenavi {
+	font: 12px/22px $f2;
+	margin-left: 75px;
+	text-align: center;
+	a, span {
+		border: 1px solid $red;
+		color: #fff;
+		display: inline-block;
+		margin: 0 2px;
+		padding: 0 6px;
+		@include transition(all,$fast);
+	}
+	a:hover,
+	a:focus,
+	a:active,
+	.pages { background: $red }
+	.pages { padding: 0 18px }
+	.current { cursor: default }
+}
+
+// Modules
+
+.border {
+	border: 2px solid $red;
+	display: block;
+	position: relative;
+	@include transition(all,$fast);
+	&:before {
+		border: 2px solid transparent;
+		content: '';
+		display: block;
+		height: 100%;
+		left: 0;
+		position: absolute;
+		top: 0;
+		width: 100%;
+		@include box-sizing;
+		@include transition(all,$fast);
+	}
+}
+a.border:hover, a.border:focus, a.border:active, 
+a:hover .border, a:focus .border, a:active .border {
+	border-color: #fff;
+	&:before { border-color: #fff }
+}
+
+.highlight {
+	background: url(../img/hr.png) no-repeat center top;
+	padding: 42px 0 30px;
+	@include clearfix;
+	&:first-child {
+		background: none;
+		padding-top: 0;
+	}
+}
+.highlight-title,
+.widget-title,
+.post-title {
+	color: $red;
+	font: 20px/1.2 $f3;
+	margin-bottom: 1.2em;
+	&:before { content: '| ' }
+}
+.highlight-title,
+.widget-news .widget-title,
+.widget-newsletter .widget-title { color: #fff }
+.highlight-image {
+	float: left;
+	margin-bottom: 20px;
+}
+.highlight-excerpt,
+.highlight-actions {
+	color: #fff;
+	font: 12px/20px $f1;
+	margin: 0 0 20px 320px;
+}
+.highlight-actions .highlight-icon {
+	color: $red;
+	display: block;
+	line-height: 26px;
+}
+
+$icoL: -5px;
+$icoT: -1px;
+$icoP: 26px;
+$paperPos: $icoL ($icoT + (-26px * 0));
+.icon-paper {
+	background: url(../img/sprites.png) no-repeat $paperPos;
+	padding-left: $icoP;
+}
+.icon-ok {
+	background: url(../img/sprites.png) no-repeat $icoL ($icoT + (-26px * 1));
+	padding-left: $icoP;
+}
+.icon-msg {
+	background: url(../img/sprites.png) no-repeat $icoL ($icoT + (-26px * 2));
+	padding-left: $icoP;
+}
+.icon-work {
+	background: url(../img/sprites.png) no-repeat $icoL ($icoT + (-26px * 3));
+	padding-left: $icoP;
+}
+
+.archive-item {
+	margin-bottom: 40px;
+	min-height: 60px;
+	padding-left: 75px;
+	position: relative;
+	a { display: block }
+}
+.archive-image {
+	display: block;
+	left: 0;
+	position: absolute;
+	top: 0;
+}
+.archive-title {
+	font: 18px/24px $f1;
+	margin-bottom: 1em;
+}
+.archive-excerpt,
+.archive-more {
+	color: #fff;
+	font: 12px/20px $f1;
+	margin-bottom: 20px;
+}
+.archive-more {
+	background: url(../img/sprites.png) no-repeat $paperPos;
+	font-weight: bold;
+	line-height: 26px;
+	margin: -3px 0 17px 0;
+	padding-left: 26px;
+}
+
+// Share
+
+.post-share {
+	background: $red;
+	background: rgba($red,.5);
+	margin: 0 80px 20px 0;
+	padding: 12px 0 8px 15px;
+	@include border-radius(10px);
+	@include clearfix;
+}
+.share-item { float: left }
+.share-fb { margin-right: 31px }
+
+// WP Classes
+
+.alignleft {
+	float: left;
+	margin: .2em 1em .8em 0;
+}
+.alignright {
+	float: right;
+	margin: .2em 0 .8em 1em;
+}
+.aligncenter {
+	display: block;
+	margin: 0 auto 1em;
+}
+
+// Widgets
+
+.widget {
+	margin-bottom: 40px;
+	@include clearfix;
+	@include bullet;
+	li {
+		color: #fff;
+		font: 12px/20px $f1;
+	}
+	img {
+		height: auto;
+		max-width: 296px;
+	}
+}
+
+.widget-categories {
+	.widget-title,
+	+ .widget .widget-title {
+		color: #fff;
+		&:before { display: none }
+	}
+	a { color: #fff }
+}
+
+// .textwidget a img {
+// 	border: 2px solid $red;
+// 	display: block;
+// 	margin-bottom: 20px;
+// 	position: relative;
+// 	&:hover,
+// 	&:focus,
+// 	&:active { border-color: #fff }
+// }
+
+.news-item,
+.widget .news-item {
+	margin-left: 0;
+	&:before { display: none }
+}
+.news-item a {
+	display: block;
+	padding-left: 45px;
+}
+.news-title {
+	color: #fff;
+	font-weight: normal;
+	margin-bottom: 20px;
+}
+
+$icoL: -4px;
+$icoT: -208px;
+li.category-noticias { background: url(../img/sprites.png) no-repeat $icoL ($icoT + (-150px * 0)) }
+li.category-jurisprudencia { background: url(../img/sprites.png) no-repeat $icoL ($icoT + (-150px * 1)) }
+
+.wgal-thumb:nth-child(odd) {
+	clear: both;
+	float: left;
+	width: 140px;
+}
+.wgal-thumb:nth-child(even) {
+	float: right;
+	width: 140px;
+}
+.addr-title {
+	font: 12px $f1;
+	padding: 5px 0;
+}
+
+// Forms
+
+.post-content .field { margin-bottom: 8px }
+.field label {
+	display: inline-block;
+	font-size: 11px;
+	margin: 8px 0 4px;
+}
+
+.text,
+.area,
+.sel,
+.file,
+.button {
+	background: $red;
+	border: 1px solid $red;
+	clear: left;
+	color: #fff;
+	display: block;
+	font: 11px/16px $f1;
+	margin: 0 0 8px;
+	outline: none;
+	padding: 9px 11px;
+	resize: none;
+	width: 300px;
+	@include box-sizing;
+	@include border-radius(4px);
+	@include placeholder(#fff);
+}
+.text:focus,
+.area:focus { @include placeholder(transparent) }
+.area,
+.button { width: 100% }
+.button {
+	background: $wine;
+	cursor: pointer;
+	@include transition(all,$fast);
+	&:hover,
+	&:focus { background-color: $red }
+	&:active { color: rgba(#fff,.4) }
+}
+.newsletter-name,
+.newsletter-email,
+.newsletter-submit {
+	background-image: url(../img/sprites.png);
+	background-repeat: no-repeat;
+	padding: 9px 9px 9px 39px;
+	text-align: left;
+	width: 100%;
+}
+.submit { padding-top: 24px }
+.newsletter-name { background-position: 0 -800px }
+.newsletter-email { background-position: 0 -840px }
+.newsletter-submit { background-position: 0 -880px }
+.field-name,
+.field-email,
+.field-phone,
+.field-subject {
+	background-image: url(../img/sprites.png);
+	background-repeat: no-repeat;
+	padding-left: 40px;
+}
+.field-name { background-position: 0 -801px }
+.field-email { background-position: 0 -841px }
+.field-phone { background-position: 0 -921px }
+.field-subject { background-position: 0 -961px }
+
+.ajax-loader { display: none !important }
+
+// Fancybox
+
+@import "fancybox";
+
+// 
+// @media
+// 
+
+// Aural
+
+@media aural {
+	.hide,
+	.aria-hide {
+		display: none !important;
+		visibility: hidden !important;
+	}
+}

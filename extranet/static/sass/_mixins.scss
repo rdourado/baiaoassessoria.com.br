@@ -1,0 +1,123 @@
+@mixin clearfix {
+	&:before,
+	&:after {
+		content: " ";
+		display: table;
+	}
+	&:after { clear: both }
+	& { *zoom: 1 }
+}
+
+@mixin transition($prop, $time:.3s) {
+	-webkit-transition: $prop $time ease-out; 
+	   -moz-transition: $prop $time ease-out; 
+		 -o-transition: $prop $time ease-out; 
+			transition: $prop $time ease-out; 
+}
+
+@mixin animation($prop) {
+	-webkit-animation: $prop;
+	   -moz-animation: $prop;
+		 -o-animation: $prop;
+			animation: $prop;
+}
+
+@mixin appearance($value:none) {
+	-webkit-appearance: $value;
+	   -moz-appearance: $value;
+			appearance: $value;
+}
+
+@mixin box-sizing($value:border-box) {
+	-webkit-box-sizing: $value;
+	   -moz-box-sizing: $value;
+			box-sizing: $value;
+}
+
+@mixin box-shadow($prop) {
+	-webkit-box-shadow: $prop;
+			box-shadow: $prop;
+}
+
+@mixin background-size($prop) {
+	-webkit-background-size: $prop;
+			background-size: $prop;
+}
+
+@mixin border-radius($radius) {
+	-webkit-border-radius: $radius;
+	border-radius: $radius;
+	background-clip: padding-box;
+}
+
+@mixin placeholder($color) {
+	&::-webkit-input-placeholder { color: $color }
+	&:-moz-placeholder { color: $color }
+	&::-moz-placeholder { color: $color }
+	&:-ms-input-placeholder { color: $color }
+}
+
+@mixin linear-gradient($orientation, $colors, $positions) {
+	$orientA: '';
+	$orientB: '';
+	$orientC: '';
+	@if $orientation == lr or $orientation == l or $orientation == left {
+		$orientA: left;
+		$orientB: to right;
+		$orientC: left top, right top;
+	}
+	@if $orientation == tb or $orientation == t or $orientation == top {
+		$orientA: top;
+		$orientB: to bottom;
+		$orientC: left top, left bottom;
+	}
+	@if $orientation == bt or $orientation == b or $orientation == bottom {
+		$orientA: bottom;
+		$orientB: to top;
+		$orientC: left bottom, left top;
+	}
+	@if $orientation == tlbr or $orientation == ltrb {
+		$orientA: -45deg;
+		$orientB: 135deg;
+		$orientC: left top, right bottom;
+	}
+	@if $orientation == bltr or $orientation == lbrt {
+		$orientA: 45deg;
+		$orientB: 45deg;
+		$orientC: left top, right bottom;
+	}
+
+	$prop: ();
+	$old: ();
+	$total: length($colors);
+	@for $i from 1 through $total {
+		$prop: append($prop, nth($colors, $i) nth($positions, $i), comma);
+		$old: append($old, color-stop(nth($positions, $i),nth($colors, $i)), comma);
+	}
+	
+	background-color: nth($colors, 1); // Old browsers
+	background-image: -moz-linear-gradient($orientA, $prop); // FF3.6+
+	background-image: -webkit-gradient(linear, $orientC, $old); // Chrome,Safari4+
+	background-image: -webkit-linear-gradient($orientA, $prop); // Chrome10+,Safari5.1+
+	background-image: -o-linear-gradient($orientA, $prop); // Opera 11.10+
+	background-image: -ms-linear-gradient($orientA, $prop); // IE10+
+	background-image: linear-gradient($orientB, $prop); // W3C
+}
+
+@mixin radial-gradient($colors, $positions: 0% 100%) {
+	$prop: ();
+	$old: ();
+	$total: length($colors);
+	@for $i from 1 through $total {
+		$prop: append($prop, nth($colors, $i) nth($positions, $i), comma);
+		$old: append($old, color-stop(nth($positions, $i),nth($colors, $i)), comma);
+	}
+	
+	background-color: nth($colors, 1); // Old browsers
+	background-image: -moz-radial-gradient(center, circle cover, $prop); // FF3.6+
+	background-image: -webkit-gradient(radial, center center, 0px, center center, 100%, $old); // Chrome,Safari4+
+	background-image: -webkit-radial-gradient(center, circle cover, $prop); // Chrome10+,Safari5.1+
+	background-image: -o-radial-gradient(center, circle cover, $prop); // Opera 12+
+	background-image: -ms-radial-gradient(center, circle cover, $prop); // IE10+
+	background-image: radial-gradient(circle at center, $prop); // W3C
+}
