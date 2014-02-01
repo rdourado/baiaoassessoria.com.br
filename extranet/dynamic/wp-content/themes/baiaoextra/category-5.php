@@ -5,12 +5,16 @@
 			<nav class='filters'>
 				<strong class='filter-title'>Sede/filial:</strong>
 				<ul class='filter-list'>
-					<li class='cat-item'><a href='<?php echo get_category_link( 5 ); ?>'>Todos</a></li>
+					<li class='cat-item<?php 
+					if ( is_category( 5 ) ) echo ' current-cat'; 
+					?>'><a href='<?php echo get_category_link( 5 ); ?>'>Todos</a></li>
 <?php 				wp_list_categories( 'title_li=&taxonomy=sedes' ) ?>
 				</ul>
 				<strong class='filter-title'>Assunto:</strong>
 				<ul class='filter-list'>
-					<li class='cat-item'><a href='<?php echo get_category_link( 5 ); ?>'>Todos</a></li>
+					<li class='cat-item<?php 
+					if ( is_category( 5 ) ) echo ' current-cat'; 
+					?>'><a href='<?php echo get_category_link( 5 ); ?>'>Todos</a></li>
 <?php 				wp_list_categories( 'title_li=&taxonomy=post_tag' ) ?>
 				</ul>
 			</nav>

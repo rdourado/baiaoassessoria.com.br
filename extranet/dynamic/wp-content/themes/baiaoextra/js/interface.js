@@ -4,7 +4,7 @@
 */
 $(document).ready(function(){
 	try{
-		$('#slider').tinycarousel({ pager : true });
+		$('#slider').tinycarousel({ pager: true, interval: true, intervalTime: 10000 });
 	}catch(e){}
 	try{
 		$('.fancybox').fancybox({
@@ -15,5 +15,10 @@ $(document).ready(function(){
 				}
 			}
 		});
+	}catch(e){}
+	try{
+		if ($('.PDS_Poll','.e-content').length) {
+			$('.PDS_Poll','.widget').parent().parent().remove();
+		}
 	}catch(e){}
 });

@@ -19,7 +19,7 @@
 							$meta = wp_get_attachment_image_src( $img['id'], 'full' );
 							$src = reset( $meta );
 							$img = wp_get_attachment_image( $img['id'], 'thumbnail' );
-							echo "<a href='{$src}' class='fancybox'>{$img}</a>";
+							echo "<a href='{$src}' rel='fancybox' class='fancybox'>{$img}</a>";
 						endforeach;
 						?>
 					</div>

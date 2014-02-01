@@ -41,6 +41,75 @@ if ( function_exists( 'acf_set_options_page_menu' ) ) {
 }
 
 // 
+// Shortcodes
+// 
+
+remove_shortcode( 'gallery' );
+add_shortcode( 'gallery', 'my_gallery_shortcode' );
+
+function my_gallery_shortcode( $atts ) {
+	global $post;
+ 
+	if ( ! empty( $atts['ids'] ) ) {
+		// 'ids' is explicitly ordered, unless you specify otherwise.
+		if ( empty( $atts['orderby'] ) )
+			$atts['orderby'] = 'post__in';
+		$atts['include'] = $atts['ids'];
+	}
+ 
+	extract( shortcode_atts( array(
+		'orderby' 	 => 'menu_order ASC, ID ASC',
+		'include' 	 => '',
+		'id' 		 => $post->ID,
+		'itemtag' 	 => 'dl',
+		'icontag' 	 => 'dt',
+		'captiontag' => 'dd',
+		'columns' 	 => 3,
+		'size' 		 => 'medium',
+		'link' 		 => 'file'
+	), $atts));
+
+	$args = array(
+		'post_type' 	 => 'attachment',
+		'post_status' 	 => 'inherit',
+		'post_mime_type' => 'image',
+		'orderby' 		 => $orderby
+	);
+ 
+	if ( ! empty( $include ) ) {
+		$args['include'] = $include;
+	} else {
+		$args['post_parent'] = $id;
+		$args['numberposts'] = -1;
+	}
+
+	$images = get_posts( $args );
+	if ( ! empty( $images ) ) echo '<div class="gallery">';
+
+	foreach( $images as $img ) {
+		$meta = wp_get_attachment_image_src( $img->ID, 'full' );
+		$src = reset( $meta );
+		$img = wp_get_attachment_image( $img->ID, 'thumbnail' );
+		echo "<a href='{$src}' rel='gal{$post->ID}' class='fancybox'>{$img}</a>";
+	}
+
+	if ( ! empty( $images ) ) echo '</div>';
+
+	/*foreach ( $images as $image ) {     
+		$caption = $image->post_excerpt;
+ 
+		$description = $image->post_content;
+		if ( $description == '' ) 
+			$description = $image->post_title;
+ 
+		$image_alt = get_post_meta( $image->ID,'_wp_attachment_image_alt', true );
+ 
+		// render your gallery here
+		echo wp_get_attachment_image( $image->ID, $size );
+	}*/
+}
+
+// 
 // Actions
 // 
 
@@ -215,7 +284,7 @@ function my_ajax_acf() {
 		echo $result . "\n";
 
 	// 
-    die();
+	die();
 }
 
 // 
@@ -387,19 +456,19 @@ class BirthdaysWidget extends WP_Widget {
 
 		global $wpdb;
 		$user_ids = $wpdb->get_col($wpdb->prepare( 
-            "
-            SELECT `user_id` 
-              FROM `{$wpdb->usermeta}` 
-             WHERE `meta_key` = %s 
-               AND `meta_value` LIKE %s 
+			"
+			SELECT `user_id` 
+			  FROM `{$wpdb->usermeta}` 
+			 WHERE `meta_key` = %s 
+			   AND `meta_value` LIKE %s 
 			ORDER BY `meta_value` DESC 
 			LIMIT 50 
-            ",
-            'nascimento',
-            date( 'Ym' ) . '%'
-        ));
-        if ( ! $user_ids )
-        	return '';
+			",
+			'nascimento',
+			date( 'Ym' ) . '%'
+		));
+		if ( ! $user_ids )
+			return '';
 
 		$user_query = new WP_User_Query(array(
 			'include' => $user_ids
@@ -481,19 +550,30 @@ class VacationWidget extends WP_Widget {
 	function widget( $args, $instance ) {
 		extract( $args, EXTR_SKIP );
 
+		global $wpdb;
+		$user_ids = $wpdb->get_col($wpdb->prepare( 
+			"
+			SELECT `user_id` 
+			  FROM `{$wpdb->usermeta}` 
+			 WHERE `meta_key` = %s 
+			   AND `meta_value` >= %d 
+			   AND `meta_value` <= %d 
+			ORDER BY `meta_value` DESC 
+			",
+			'ferias_de',
+			date( 'Ym01' ),
+			date( 'Ymd', strtotime( 'last day of +1 month' ) )
+		));
+		if ( empty( $user_ids ) )
+			return '';
+
 		$user_query = new WP_User_Query(array(
-			'number' 	=> 5,
-			'orderby' 	=> 'meta_value_num',
-			'order' 	=> 'ASC',
-			'meta_key' 		=> 'ferias_de',
-			'meta_value' 	=> date( 'Ymd' ),
-			'meta_compare' 	=> '>'
+			'include' => $user_ids
 		));
 		if ( empty( $user_query->results ) )
 			return '';
-
 		echo $before_widget;
-		$link_to = empty( $instance['link_to'] ) ? '' : esc_url( $instance['title'] );
+		$link_to = empty( $instance['link_to'] ) ? '' : esc_url( $instance['link_to'] );
  
 		echo "{$before_title}Período de férias{$after_title}";
  
@@ -527,8 +607,7 @@ class VacationWidget extends WP_Widget {
 </ul>
 <?php 	if ($link_to) : ?>
 <a class='widget-more u' href='<?php echo $link_to; ?>'>Veja a lista completa</a>
-<?php
-		endif;
+<?php 	endif;
 		echo $after_widget;
 	}
  
@@ -547,38 +626,39 @@ class ChangesWidget extends WP_Widget {
 	}
  
 	function form( $instance ) {
-		$instance = wp_parse_args( (array) $instance, array( 'link_to' => '' ) );
-		$link_to = $instance['link_to'];
+		$instance = wp_parse_args( (array) $instance, array( 'limit' => 10 ) );
+		$limit = $instance['limit'];
 ?><p>
-	<!-- <label for="<?php echo $this->get_field_id('link_to'); ?>">
-		Link para a lista completa: 
-		<input class="widefat" id="<?php echo $this->get_field_id('link_to'); ?>" name="<?php echo $this->get_field_name('link_to'); ?>" type="url" value="<?php echo esc_attr($link_to); ?>" />
-	</label> -->
+	<label for="<?php echo $this->get_field_id('limit'); ?>">
+		Número de itens: 
+		<input class="widefat" id="<?php echo $this->get_field_id('limit'); ?>" name="<?php echo $this->get_field_name('limit'); ?>" type="number" step="1" min="1" max="50" value="<?php echo esc_attr($limit); ?>" />
+	</label>
 </p><?php
 	}
  
 	function update( $new_instance, $old_instance ) {
 		$instance = $old_instance;
-		$instance['link_to'] = esc_url( $new_instance['link_to'] );
+		$instance['limit'] = intval( $new_instance['limit'] );
 		return $instance;
 	}
  
 	function widget( $args, $instance ) {
 		extract( $args, EXTR_SKIP );
+		$limit = empty( $instance['limit'] ) ? 10 : intval( $instance['limit'] );
 
 		global $wpdb;
 		$user_ids = $wpdb->get_col($wpdb->prepare( 
-            "
-            SELECT `user_id` 
-              FROM `{$wpdb->usermeta}` 
-             WHERE `meta_key` LIKE %d 
-               AND `meta_value` < %d 
+			"
+			SELECT `user_id` 
+			  FROM `{$wpdb->usermeta}` 
+			 WHERE `meta_key` LIKE %s 
+			   AND `meta_value` < %d 
 			ORDER BY `meta_value` DESC 
-			LIMIT 50 
-            ",
-            'mudancas_%_data',
-            date( 'Ymd' )
-        ));
+			LIMIT {$limit} 
+			",
+			'mudancas_%_data',
+			date( 'Ymd' )
+		));
 		if ( empty( $user_ids ) )
 			return '';
 
@@ -589,10 +669,7 @@ class ChangesWidget extends WP_Widget {
 			return '';
 
 		echo $before_widget;
-		$link_to = empty( $instance['link_to'] ) ? '' : esc_url( $instance['title'] );
- 
 		echo "{$before_title}Mudanças recentes{$after_title}";
- 
 ?>
 <ul class='widget-list'>
 <?php 
@@ -616,10 +693,7 @@ class ChangesWidget extends WP_Widget {
 	endforeach;
 ?>
 </ul>
-<?php 	if ($link_to) : ?>
-<a class='widget-more u' href='<?php echo $link_to; ?>'>Veja a lista completa</a>
-<?php
-		endif;
+<?php 	
 		echo $after_widget;
 	}
  
