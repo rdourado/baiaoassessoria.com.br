@@ -10,8 +10,10 @@
 	<header class='head'>
 		<h1 class='logo'><img alt='<?php name() ?>' class='logo-img' height='159' src='<?php t_url() ?>/img/logo.png' width='277'></h1>
 		<section class='welcome'>
-			<h2 class='welcome-title'>Olá
-			<strong><?php user_name() ?></strong></h2>
+			<h2 class='welcome-title'>
+				Olá <strong><?php user_name() ?></strong> 
+				<a href="<?php echo wp_logout_url( home_url() ); ?>">sair</a>
+			</h2>
 			<?php user_avatar( 'welcome-avatar' ) ?>
 			<dl class='welcome-data'>
 				<dt class='welcome-term'>Setor:</dt>

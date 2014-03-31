@@ -18,7 +18,12 @@ function user_name() {
 
 function user_field( $field ) {
 	global $current_user;
-	the_field( $field, "user_{$current_user->ID}" );
+	$uID = "user_{$current_user->ID}";
+	switch ( $field ) {
+		case 'sede' : the_sede( $uID ); break;
+		case 'setor' : the_setor( $uID ); break;
+		default : the_field( $field, $uID ); break;
+	}
 }
 
 function user_avatar( $class = 'avatar' ) {
@@ -27,6 +32,59 @@ function user_avatar( $class = 'avatar' ) {
 	$avatar_id = get_field( 'avatar', "user_{$current_user->ID}" );
 	if ( $avatar_id )
 		echo wp_get_attachment_image( $avatar_id, 'user-avatar', false, $attr );
+}
+
+function get_UF( $uID = 0 ) {
+	if ( ! $uID ) $uID = get_current_user_id();
+	$sede = get_sede( $uID );
+	preg_match( '/\((.*?)\)/', $sede, $matches );
+	return $matches[1];
+}
+
+function get_sede( $uID ) {
+	global $wpdb;
+	$uID = intval( end( explode( '_', $uID ) ) );
+	$pID = $wpdb->get_var( $wpdb->prepare(
+		"
+		SELECT `post_id` 
+		  FROM `{$wpdb->postmeta}` 
+		 WHERE `meta_key` LIKE %s 
+		   AND `meta_value` = %d 
+		ORDER BY `meta_key` ASC 
+		LIMIT 1
+		",
+		'departamentos_%_funcionarios_%_usuario',
+		$uID
+	) );
+	if ( ! $pID ) return;
+	return get_the_title( $pID );
+	
+}
+
+function the_sede( $uID, $before = '' ) {
+	$sede = get_sede( $uID );
+	if ( ! $sede ) return;
+	echo $before . $sede;
+}
+
+function the_setor( $uID, $before = '' ) {
+	global $wpdb;
+	$uID = intval( end( explode( '_', $uID ) ) );
+	$row = $wpdb->get_row( $wpdb->prepare(
+		"
+		SELECT `post_id`, `meta_key` 
+		  FROM `{$wpdb->postmeta}` 
+		 WHERE `meta_key` LIKE %s 
+		   AND `meta_value` = %d 
+		ORDER BY `meta_key` ASC 
+		LIMIT 1
+		",
+		'departamentos_%_funcionarios_%_usuario',
+		$uID
+	) );
+	if ( ! $row ) return;
+	preg_match( '/^departamentos_(.*?)_funcionarios/', $row->meta_key, $matches );
+	echo $before . get_post_meta( $row->post_id, 'departamentos_' . $matches[1] . '_nome', true );
 }
 
 // 
@@ -94,19 +152,6 @@ function my_gallery_shortcode( $atts ) {
 	}
 
 	if ( ! empty( $images ) ) echo '</div>';
-
-	/*foreach ( $images as $image ) {     
-		$caption = $image->post_excerpt;
- 
-		$description = $image->post_content;
-		if ( $description == '' ) 
-			$description = $image->post_title;
- 
-		$image_alt = get_post_meta( $image->ID,'_wp_attachment_image_alt', true );
- 
-		// render your gallery here
-		echo wp_get_attachment_image( $image->ID, $size );
-	}*/
 }
 
 // 
@@ -116,6 +161,8 @@ function my_gallery_shortcode( $atts ) {
 add_action( 'after_setup_theme', 'my_setup' );
 add_action( 'wp_enqueue_scripts', 'my_scripts' );
 add_action( 'template_redirect', 'my_auth_redirect' );
+add_action( 'pre_get_posts', 'my_pre_get_posts' );
+// add_action( 'acf/save_post', 'my_acf_save_post', 20 );
 add_action( 'widgets_init', 'my_widgets_init' );
 add_action( 'widgets_init', 'unregister_default_widgets', 11 );
 
@@ -131,6 +178,12 @@ function my_setup() {
 	set_post_thumbnail_size( 56, 56, true );
 	add_image_size( 'user-avatar', 76, 76, true );
 	add_image_size( 'highlight', 612, 392, true );
+
+	// Roles
+	add_role( 'rh', 'RH', array(
+		'edit_users' => true,
+		'read' => true
+	) );
 }
 
 function my_scripts() {
@@ -146,6 +199,14 @@ function my_auth_redirect() {
 		wp_redirect( wp_login_url( home_url( '/' ) ) );
 		exit;
 	}
+}
+
+function my_pre_get_posts( $query ) {
+    if ( ! is_admin() && ( $query->is_search() || $query->is_category() || $query->is_tag() ) ) {
+    	$uf = strtolower( get_UF( 2 ) );
+    	// $term = get_term_by( 'slug', $uf, 'sedes' );
+    	$query->set( 'sedes', $uf );
+    }
 }
 
 function my_widgets_init() {
@@ -266,20 +327,11 @@ function my_ajax_acf() {
 	global $wpdb;
 	$value = $_GET['q'];
 
-	// Empresas
-	$sql = "SELECT DISTINCT `meta_value` FROM `$wpdb->postmeta` 
+	// Cargos
+	$sql = "SELECT DISTINCT `meta_value` FROM `$wpdb->usermeta` 
 			WHERE `meta_key` LIKE %s 
 			AND `meta_value` LIKE %s";
-	$results = $wpdb->get_col( $wpdb->prepare( $sql, 'departamentos_%_nome', "%{$value}%" ) );
-	foreach ( $results as $result ) 
-		echo $result . "\n";
-
-	// Departamentos
-	$sql = "SELECT DISTINCT `post_title` FROM `$wpdb->posts` 
-			WHERE `post_type` = %s 
-			AND `post_status` = %s 
-			AND `post_title` LIKE %s";
-	$results = $wpdb->get_col( $wpdb->prepare( $sql, 'empresa', 'publish', "%{$value}%" ) );
+	$results = $wpdb->get_col( $wpdb->prepare( $sql, 'cargo', "%{$value}%" ) );
 	foreach ( $results as $result ) 
 		echo $result . "\n";
 
@@ -290,49 +342,6 @@ function my_ajax_acf() {
 // 
 // Custom Post Type
 // 
-
-/*add_action( 'init', 'register_cpt_galeria' );
-
-function register_cpt_galeria() {
-
-	$labels = array( 
-		'name' => 'Galerias',
-		'singular_name' => 'Galeria',
-		'add_new' => 'Add New',
-		'add_new_item' => 'Add New Galeria',
-		'edit_item' => 'Edit Galeria',
-		'new_item' => 'New Galeria',
-		'view_item' => 'View Galeria',
-		'search_items' => 'Search Galerias',
-		'not_found' => 'No galerias found',
-		'not_found_in_trash' => 'No galerias found in Trash',
-		'parent_item_colon' => 'Parent Galeria:',
-		'menu_name' => 'Galerias',
-	);
-
-	$args = array( 
-		'labels' => $labels,
-		'hierarchical' => false,
-		
-		'supports' => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'custom-fields', 'comments', 'revisions' ),
-		'taxonomies' => array( 'category', 'post_tag' ),
-		'public' => true,
-		'show_ui' => true,
-		'show_in_menu' => true,
-		'menu_position' => 5,
-		
-		'show_in_nav_menus' => false,
-		'publicly_queryable' => true,
-		'exclude_from_search' => false,
-		'has_archive' => true,
-		'query_var' => true,
-		'can_export' => true,
-		'rewrite' => true,
-		'capability_type' => 'post'
-	);
-
-	register_post_type( 'galeria', $args );
-}*/
 
 add_action( 'init', 'register_cpt_empresa' );
 
@@ -503,7 +512,7 @@ class BirthdaysWidget extends WP_Widget {
 		$date = DateTime::createFromFormat( 'Ymd', $value );
 		if ( $date ) echo date_i18n( 'd/m/Y', $date->getTimestamp() );
 		?></time>
-		- <?php the_field( 'cargo', $uID ) ?> - <?php the_field( 'setor', $uID ) ?>
+		- <?php the_field( 'cargo', $uID ); the_setor( $uID, ' – ' ); ?>
 	</li>
 <?php 
 	endforeach;
@@ -577,37 +586,36 @@ class VacationWidget extends WP_Widget {
  
 		echo "{$before_title}Período de férias{$after_title}";
  
-?>
-<ul class='widget-list'>
-<?php 
-	foreach ( $user_query->results as $user_obj ) : 
-		$user = $user_obj->data;
-		$uID = "user_{$user->ID}";
-?>
-	<li>
-		<a href='<?php echo get_author_posts_url( $user->ID ); ?>'>
-			<?php 
-			$avatar_id = get_field( 'avatar', $uID );
-			if ( $avatar_id )
-				echo wp_get_attachment_image( $avatar_id, 'post-thumbnail' );
-			?>
-			<strong><?php echo $user->display_name; ?></strong>
-		</a>
-		<br>
-		<time><?php 
-		$value = get_field( 'ferias_de', $uID );
-		$date = DateTime::createFromFormat( 'Ymd', $value );
-		if ( $date ) echo date_i18n( 'd/m/Y', $date->getTimestamp() );
-		?></time>
-		- <?php the_field( 'cargo', $uID ) ?> - <?php the_field( 'setor', $uID ) ?>
-	</li>
-<?php 
-	endforeach;
-?>
-</ul>
-<?php 	if ($link_to) : ?>
-<a class='widget-more u' href='<?php echo $link_to; ?>'>Veja a lista completa</a>
-<?php 	endif;
+		?><ul class='widget-list'><?php 
+		$user_query->results = array_reverse( $user_query->results );
+		foreach ( $user_query->results as $user_obj ) : 
+			$user = $user_obj->data;
+			$uID = "user_{$user->ID}";
+			?><li>
+				<a href='<?php echo get_author_posts_url( $user->ID ); ?>'>
+					<?php 
+					$avatar_id = get_field( 'avatar', $uID );
+					if ( $avatar_id )
+						echo wp_get_attachment_image( $avatar_id, 'post-thumbnail' );
+					?>
+					<strong><?php echo $user->display_name; ?></strong>
+				</a>
+				<br>
+				<time><?php 
+				$de = get_field( 'ferias_de', $uID );
+				$de = DateTime::createFromFormat( 'Ymd', $de );
+				$ate = get_field( 'ferias_ate', $uID );
+				$ate = DateTime::createFromFormat( 'Ymd', $ate );
+				if ( $de && $ate ) 
+					echo date_i18n( 'd/m/y', $de->getTimestamp() ) . ' » ' . date_i18n( 'd/m/y', $ate->getTimestamp() );
+				?></time>
+				<?php the_field( 'cargo', $uID ) ?> <?php the_setor( $uID, ' – ' ) ?>
+			</li><?php 
+		endforeach;
+		?></ul><?php 
+		if ($link_to) : 
+			?><a class='widget-more u' href='<?php echo $link_to; ?>'>Veja a lista completa</a><?php 
+		endif;
 		echo $after_widget;
 	}
  
@@ -647,9 +655,9 @@ class ChangesWidget extends WP_Widget {
 		$limit = empty( $instance['limit'] ) ? 10 : intval( $instance['limit'] );
 
 		global $wpdb;
-		$user_ids = $wpdb->get_col($wpdb->prepare( 
+		$rows = $wpdb->get_results($wpdb->prepare( 
 			"
-			SELECT `user_id` 
+			SELECT DISTINCT `user_id`, `meta_key`, `meta_value`
 			  FROM `{$wpdb->usermeta}` 
 			 WHERE `meta_key` LIKE %s 
 			   AND `meta_value` < %d 
@@ -659,35 +667,33 @@ class ChangesWidget extends WP_Widget {
 			'mudancas_%_data',
 			date( 'Ymd' )
 		));
-		if ( empty( $user_ids ) )
+		if ( empty( $rows ) )
 			return '';
 
-		$user_query = new WP_User_Query(array(
-			'include' => $user_ids
-		));
-		if ( empty( $user_query->results ) )
-			return '';
+		// $user_query = new WP_User_Query(array(
+			// 'include' => $user_ids
+		// ));
+		// if ( empty( $user_query->results ) )
+			// retur/n '';
 
 		echo $before_widget;
 		echo "{$before_title}Mudanças recentes{$after_title}";
 ?>
 <ul class='widget-list'>
 <?php 
-	foreach ( $user_query->results as $user_obj ) : 
-		$user = $user_obj->data;
-		$uID = "user_{$user->ID}";
+	foreach ( $rows as $row ) : 
+		$uID = $row->user_id;
+		$user = get_userdata( $uID );
+		preg_match( '/^mudancas_(.*?)_data/', $row->meta_key, $matches );
+		$key = 'mudancas_' . $matches[1] . '_mudanca';
+		$mudanca = get_user_meta( $row->user_id, $key, true );
+		$date = DateTime::createFromFormat( 'Ymd', $row->meta_value );
 ?>
 	<li>
-		<a href='<?php echo get_author_posts_url( $user->ID ); ?>'>
-			<strong><?php echo $user->display_name; ?></strong>
-		</a>
+		<a href='<?php echo get_author_posts_url( $uID ); ?>'><strong><?php echo $user->display_name; ?></strong></a>
 		<br>
-		<time><?php 
-		$value = get_field( 'nascimento', $uID );
-		$date = DateTime::createFromFormat( 'Ymd', $value );
-		if ( $date ) echo date_i18n( 'd/m/Y', $date->getTimestamp() );
-		?></time>
-		- <?php the_field( 'cargo', $uID ) ?> - <?php the_field( 'setor', $uID ) ?>
+		<time><?php if ( $date ) echo date_i18n( 'd/m/Y', $date->getTimestamp() ); ?></time>
+		- <?php echo $mudanca; ?>
 	</li>
 <?php 
 	endforeach;

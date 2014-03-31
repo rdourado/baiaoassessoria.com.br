@@ -16,11 +16,11 @@ $user = $user->data;
 			<h2 class='user-name'><?php echo $user->display_name; ?></h2>
 			<dl class='user-data'>
 				<dt class='user-term'>Setor:</dt>
-				<dd class='user-value'><?php the_field( 'setor', "user_{$uID}" ) ?></dd>
+				<dd class='user-value'><?php the_setor( $uID ) ?></dd>
 			</dl>
 			<dl class='user-data'>
 				<dt class='user-term'>Sede/Filial:</dt>
-				<dd class='user-value'><?php the_field( 'sede', "user_{$uID}" ) ?></dd>
+				<dd class='user-value'><?php the_sede( $uID ) ?></dd>
 			</dl>
 			<dl class='user-data'>
 				<dt class='user-term'>Cargo:</dt>

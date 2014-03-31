@@ -85,6 +85,10 @@ a
 		color: $red
 		font-size: 20px
 		font-weight: normal
+	a
+		color: #fff
+		&:hover, &:focus, &:active
+			color: $red
 .welcome-avatar
 	border: 2px solid #fff
 	float: left
@@ -340,6 +344,7 @@ a
 .comment
 	padding-left: 100px
 	position: relative
+	@include clearfix
 	.attachment-user-avatar
 		display: block
 		left: 0
@@ -347,6 +352,7 @@ a
 		top: 2px
 .comment-body
 	margin-bottom: 30px
+	min-height: 80px
 .comment-reply-link,
 #submit
 	background: $wineL

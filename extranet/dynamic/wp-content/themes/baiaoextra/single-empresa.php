@@ -24,6 +24,7 @@
 			<ul class="team-list">
 <?php 			while( has_sub_field( 'funcionarios' ) ) :
 				$u = (object) get_sub_field( 'usuario' );
+				if ( $u->ID ) :
 				$u_link = get_author_posts_url( $u->ID ); ?>
 				<li class="team-item">
 					<?php 
@@ -37,7 +38,8 @@
 					<p class="team-info"><?php the_field( 'telefone', "user_{$u->ID}" ) ?><br>
 					<a href="mailto:<?php echo $u->user_email; ?>" class="u"><?php echo $u->user_email; ?></a></p>
 				</li>
-<?php 			endwhile; ?>
+<?php 			endif;
+				endwhile; ?>
 			</ul>
 		</section>
 <?php 	endwhile; ?>
