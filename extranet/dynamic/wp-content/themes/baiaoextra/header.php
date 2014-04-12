@@ -3,6 +3,7 @@
 <head>
 	<meta charset='UTF-8'>
 	<title><?php wp_title() ?></title>
+	<link rel="shortcut icon" href="<?php echo get_stylesheet_directory_uri(); ?>/favicon.ico">
 	<link href='<?php t_url() ?>/css/screen.css' rel='stylesheet'>
 	<?php wp_head() ?>
 </head>

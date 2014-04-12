@@ -239,6 +239,40 @@ function unregister_default_widgets() {
 }
 
 // 
+// Login
+// 
+
+add_action( 'login_enqueue_scripts', 'my_login_logo' );
+add_filter( 'login_headerurl', 'my_login_logo_url' );
+add_filter( 'login_headertitle', 'my_login_logo_url_title' );
+
+function my_login_logo() {
+	?><style type="text/css">
+	body.login div#login h1 {
+		height: 70px;
+	}
+	body.login div#login h1 a {
+		background: url(<?php echo get_stylesheet_directory_uri(); ?>/img/logo.png);
+		display: block;
+		height: 159px;
+		left: 50%;
+		margin-left: -139px;
+		position: fixed;
+		top: 0;
+		width: 277px;
+	}
+	</style><?php
+}
+
+function my_login_logo_url() {
+    return get_bloginfo( 'url' );
+}
+
+function my_login_logo_url_title() {
+    return get_bloginfo( 'name' );
+}
+
+// 
 // Comments
 // 
 
@@ -470,7 +504,7 @@ class BirthdaysWidget extends WP_Widget {
 			  FROM `{$wpdb->usermeta}` 
 			 WHERE `meta_key` = %s 
 			   AND `meta_value` LIKE %s 
-			ORDER BY `meta_value` DESC 
+			ORDER BY `meta_value` ASC 
 			LIMIT 50 
 			",
 			'nascimento',
@@ -479,11 +513,11 @@ class BirthdaysWidget extends WP_Widget {
 		if ( ! $user_ids )
 			return '';
 
-		$user_query = new WP_User_Query(array(
+		/*$user_query = new WP_User_Query(array(
 			'include' => $user_ids
 		));
 		if ( empty( $user_query->results ) )
-			return '';
+			return '';*/
 
 		echo $before_widget;
 		$link_to = empty( $instance['link_to'] ) ? '' : esc_url( $instance['title'] );
@@ -493,8 +527,8 @@ class BirthdaysWidget extends WP_Widget {
 ?>
 <ul class='widget-list'>
 <?php 
-	foreach ( $user_query->results as $user_obj ) : 
-		$user = $user_obj->data;
+	foreach ( $user_ids as $user_id ) : 
+		$user = get_userdata( $user_id );
 		$uID = "user_{$user->ID}";
 ?>
 	<li>
@@ -512,7 +546,7 @@ class BirthdaysWidget extends WP_Widget {
 		$date = DateTime::createFromFormat( 'Ymd', $value );
 		if ( $date ) echo date_i18n( 'd/m/Y', $date->getTimestamp() );
 		?></time>
-		- <?php the_field( 'cargo', $uID ); the_setor( $uID, ' – ' ); ?>
+		– <?php the_field( 'cargo', $uID ); the_setor( $uID, ' – ' ); ?>
 	</li>
 <?php 
 	endforeach;
@@ -567,7 +601,7 @@ class VacationWidget extends WP_Widget {
 			 WHERE `meta_key` = %s 
 			   AND `meta_value` >= %d 
 			   AND `meta_value` <= %d 
-			ORDER BY `meta_value` DESC 
+			ORDER BY `meta_value` ASC 
 			",
 			'ferias_de',
 			date( 'Ym01' ),
@@ -576,11 +610,12 @@ class VacationWidget extends WP_Widget {
 		if ( empty( $user_ids ) )
 			return '';
 
-		$user_query = new WP_User_Query(array(
+		/*$user_query = new WP_User_Query(array(
 			'include' => $user_ids
 		));
 		if ( empty( $user_query->results ) )
-			return '';
+			return '';*/
+		
 		echo $before_widget;
 		$link_to = empty( $instance['link_to'] ) ? '' : esc_url( $instance['link_to'] );
  
@@ -588,8 +623,8 @@ class VacationWidget extends WP_Widget {
  
 		?><ul class='widget-list'><?php 
 		$user_query->results = array_reverse( $user_query->results );
-		foreach ( $user_query->results as $user_obj ) : 
-			$user = $user_obj->data;
+		foreach ( $user_ids as $user_id ) : 
+			$user = get_userdata( $user_id );
 			$uID = "user_{$user->ID}";
 			?><li>
 				<a href='<?php echo get_author_posts_url( $user->ID ); ?>'>
@@ -660,7 +695,7 @@ class ChangesWidget extends WP_Widget {
 			SELECT DISTINCT `user_id`, `meta_key`, `meta_value`
 			  FROM `{$wpdb->usermeta}` 
 			 WHERE `meta_key` LIKE %s 
-			   AND `meta_value` < %d 
+			   AND `meta_value` <= %d 
 			ORDER BY `meta_value` DESC 
 			LIMIT {$limit} 
 			",
@@ -670,11 +705,11 @@ class ChangesWidget extends WP_Widget {
 		if ( empty( $rows ) )
 			return '';
 
-		// $user_query = new WP_User_Query(array(
-			// 'include' => $user_ids
-		// ));
-		// if ( empty( $user_query->results ) )
-			// retur/n '';
+		/*$user_query = new WP_User_Query(array(
+			'include' => $user_ids
+		));
+		if ( empty( $user_query->results ) )
+			return '';*/
 
 		echo $before_widget;
 		echo "{$before_title}Mudanças recentes{$after_title}";
