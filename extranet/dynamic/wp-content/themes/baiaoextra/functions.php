@@ -503,12 +503,12 @@ class BirthdaysWidget extends WP_Widget {
 			SELECT `user_id` 
 			  FROM `{$wpdb->usermeta}` 
 			 WHERE `meta_key` = %s 
-			   AND `meta_value` LIKE %s 
+			   AND SUBSTRING(`meta_value`,5,2) = %s 
 			ORDER BY `meta_value` ASC 
 			LIMIT 50 
 			",
 			'nascimento',
-			date( 'Ym' ) . '%'
+			date( 'm' )
 		));
 		if ( ! $user_ids )
 			return '';

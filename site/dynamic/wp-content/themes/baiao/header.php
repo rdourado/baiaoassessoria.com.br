@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title><?php wp_title() ?></title>
+	<link rel="shortcut icon" href="<?php echo get_stylesheet_directory_uri(); ?>/favicon.ico">
 	<link rel="stylesheet" href="<?php url(); ?>/css/screen.css" media="all">
 	<!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script><![endif]-->
 	<!-- WP/ --><?php wp_head() ?><!-- /WP -->
