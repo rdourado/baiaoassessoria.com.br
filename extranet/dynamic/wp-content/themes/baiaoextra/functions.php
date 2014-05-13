@@ -170,7 +170,7 @@ function my_setup() {
 	// Menus
 	register_nav_menus( array(
 		'primary'   => 'Menu principal',
-		'secondary' => 'Menu secundário',
+		// 'secondary' => 'Menu secundário',
 	) );
 
 	// Thumbnails
