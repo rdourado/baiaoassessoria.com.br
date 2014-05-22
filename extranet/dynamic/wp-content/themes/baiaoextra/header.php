@@ -56,14 +56,6 @@
 			) );
 			?>
 
-			<?php 
-			wp_nav_menu( array(
-				'theme_location' => 'secondary',
-				'container' => '',
-				'menu_class' => 'shortcuts',
-			) );
-			?>
-
 		</nav>
 	</header>
 	<hr>
