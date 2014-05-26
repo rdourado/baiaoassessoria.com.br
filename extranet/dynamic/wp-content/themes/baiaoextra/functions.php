@@ -504,7 +504,7 @@ class BirthdaysWidget extends WP_Widget {
 			  FROM `{$wpdb->usermeta}` 
 			 WHERE `meta_key` = %s 
 			   AND SUBSTRING(`meta_value`,5,2) = %s 
-			ORDER BY `meta_value` ASC 
+			ORDER BY SUBSTRING(`meta_value`,5,4) ASC 
 			LIMIT 50 
 			",
 			'nascimento',
@@ -544,7 +544,7 @@ class BirthdaysWidget extends WP_Widget {
 		<time><?php 
 		$value = get_field( 'nascimento', $uID );
 		$date = DateTime::createFromFormat( 'Ymd', $value );
-		if ( $date ) echo date_i18n( 'd/m/Y', $date->getTimestamp() );
+		if ( $date ) echo date_i18n( 'd/m', $date->getTimestamp() );
 		?></time>
 		– <?php the_field( 'cargo', $uID ); the_setor( $uID, ' – ' ); ?>
 	</li>

@@ -15,7 +15,8 @@
 					<li class='cat-item<?php 
 					if ( is_category( 1 ) ) echo ' current-cat'; 
 					?>'><a href='<?php echo get_category_link( 1 ); ?>'>Todos</a></li>
-<?php 				wp_list_categories( 'title_li=&taxonomy=post_tag' ) ?>
+<?php 				$list = wp_list_categories( 'title_li=&taxonomy=post_tag&echo=0&current_category=' . get_query_var('tag_id') );
+					echo str_replace( '" title', '&amp;cat=1" title', $list );  ?>
 				</ul>
 			</nav>
 			<ol class='post-archive'>
